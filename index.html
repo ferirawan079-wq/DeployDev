@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Deploy Web FerryWeDev - Deploy Web</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #7b2ff7, #2b86c5);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 15px;
+  }
+  .container {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 900;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+  }
+  label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 14px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #eee;
+  }
+  input[type="text"], input[type="url"], select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 14px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    box-shadow: inset 0 0 8px rgba(255,255,255,0.2);
+    transition: background 0.3s ease;
+  }
+  input[type="text"]::placeholder,
+  input[type="url"]::placeholder {
+    color: #ddd;
+  }
+  input[type="text"]:focus,
+  input[type="url"]:focus,
+  select:focus {
+    background: rgba(255,255,255,0.35);
+  }
+  .checkbox-group {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+  }
+  input[type="checkbox"] {
+    transform: scale(1.3);
+    margin-right: 12px;
+    cursor: pointer;
+  }
+  .checkbox-group label {
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button {
+    margin-top: 30px;
+    width: 100%;
+    padding: 15px 10px;
+    font-weight: 800;
+    background: #6b1df7;
+    border: none;
+    border-radius: 18px;
+    font-size: 1.15rem;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 6px 18px #972fff;
+    transition: all 0.3s ease;
+  }
+  button:hover {
+    background: #974dff;
+    box-shadow: 0 8px 25px #ab73ff;
+    transform: translateY(-3px);
+  }
+  .output {
+    margin-top: 30px;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    animation: fadeIn 0.8s ease forwards;
+  }
+  .output a {
+    color: #ffdc6a;
+    text-decoration: underline;
+    word-break: break-all;
+    font-size: 1.05rem;
+  }
+  .qr-container {
+    margin-top: 25px;
+    display: inline-block;
+    background: #fff;
+    padding: 18px;
+    border-radius: 22px;
+    box-shadow: 0 6px 20px rgba(107, 29, 247, 0.3);
+    transition: transform 0.3s ease;
+  }
+  .qr-container:hover {
+    transform: rotate(5deg) scale(1.07);
+    box-shadow: 0 10px 30px rgba(107, 29, 247, 0.45);
+  }
+  .animation-message {
+    margin-top: 40px;
+    font-size: 1.7rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #874ffe, #3c69fc);
+    padding: 20px 32px;
+    border-radius: 28px;
+    color: white;
+    box-shadow: 0 8px 25px rgba(135, 79, 254, 0.7);
+    opacity: 0;
+    animation: fadeInScaleUp 1.5s forwards;
+  }
+  @keyframes fadeInScaleUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.6) translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+</style>
+</head>
+<body>
+
+<div class="container" role="main" aria-label="Deploy web form">
+  <h1>FerryWebDev - Web Deploy</h1>
+
+  <form id="deployForm" novalidate>
+    <label for="fileInput">Upload File <small>(Opsional)</small></label>
+    <input type="file" name="fileInput" id="fileInput" aria-describedby="fileHelp" />
+
+    <label for="webName">Nama Web</label>
+    <input type="text" id="webName" name="webName" placeholder="Contoh: FerryWebDev" required aria-required="true" />
+
+    <label for="webLink">Link Web</label>
+    <input type="url" id="webLink" name="webLink" placeholder="https://example.com" required aria-required="true" />
+
+    <label for="qrStyle">Pilih Garis QR Code</label>
+    <select id="qrStyle" name="qrStyle" aria-label="Pilih gaya garis QR Code">
+      <option value="square">Kotak Biasa (Simple)</option>
+      <option value="dots">Titik</option>
+      <option value="rounded">Garis Bulat (Rounded)</option>
+      <option value="lines">Garis Pola (Lines)</option>
+    </select>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="generateQR" name="generateQR" checked />
+      <label for="generateQR">Buat QR Code otomatis</label>
+    </div>
+
+    <button type="submit" id="deployBtn">Deploy Web</button>
+  </form>
+
+  <section class="output" id="outputArea" aria-live="polite"></section>
+</div>
+
+<!-- QR-Code-Styling library CDN -->
+<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+<script>
+  // API key langsung di kode (dummy)
+  const API_KEY = "OpjpijUT5gTP9uSFtQteTiBG";
+
+  const form = document.getElementById('deployForm');
+  const outputArea = document.getElementById('outputArea');
+
+  // Instance QRCodeStyling - will be created dynamically
+  let qrCode = null;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = form.webName.value.trim();
+    const link = form.webLink.value.trim();
+    const generateQR = form.generateQR.checked;
+    const qrStyle = form.qrStyle.value;
+
+    if (!name || !link) {
+      alert('Mohon isi Nama Web dan Link Web terlebih dahulu.');
+      return;
+    }
+
+    outputArea.innerHTML = '';
+
+    // Tampilkan info nama dan link
+    const linkContainer = document.createElement('div');
+    linkContainer.setAttribute('aria-label', 'Link Web hasil deploy');
+    linkContainer.innerHTML = `<strong>Nama Web:</strong> ${name}<br/>
+                               <strong>Link Web:</strong> <a href="${link}" target="_blank" rel="noopener">${link}</a>`;
+    outputArea.appendChild(linkContainer);
+
+    if (generateQR) {
+      const qrDiv = document.createElement('div');
+      qrDiv.classList.add('qr-container');
+      qrDiv.setAttribute('aria-label', 'QR Code untuk link web');
+      outputArea.appendChild(qrDiv);
+
+      // Map gaya garis QR:
+      // https://github.com/kozakdenys/qr-code-styling/#properties
+      // Pilihan pola bentuk kotak, dots, rounded, lines (pattern)
+
+      let dotsOptions, cornersSquareOptions, cornersDotOptions;
+
+      switch(qrStyle) {
+        case 'dots':
+          dotsOptions = {type: 'dots'};
+          cornersSquareOptions = {type: 'dot'};
+          cornersDotOptions = {type: 'dot'};
+          break;
+        case 'rounded':
+          dotsOptions = {type: 'rounded'};
+          cornersSquareOptions = {type: 'extra-rounded'};
+          cornersDotOptions = {type: 'dot'};
+          break;
+        case 'lines':
+          dotsOptions = {type: 'classy-rounded'};
+          cornersSquareOptions = {type: 'cutting-edge'};
+          cornersDotOptions = {type: 'dot'};
+          break;
+        case 'square':
+        default:
+          dotsOptions = {type: 'square'};
+          cornersSquareOptions = {type: 'square'};
+          cornersDotOptions = {type: 'dot'};
+          break;
+      }
+
+      // Buat QRCodeStyling baru setiap submit untuk reset
+      qrCode = new QRCodeStyling({
+        width: 180,
+        height: 180,
+        data: link,
+        image: "",  // Jika mau favicon muncul di tengah bisa tambahkan file img tapi opsional
+        dotsOptions: {
+          color: "#6b1df7",
+          ...dotsOptions
+        },
+        cornersSquareOptions: {
+          color: "#6b1df7",
+          ...cornersSquareOptions
+        },
+        cornersDotOptions: {
+          color: "#6b1df7",
+          ...cornersDotOptions
+        },
+        backgroundOptions: {
+          color: "#ffffff"
+        },
+        qrOptions: {
+          errorCorrectionLevel: 'H'
+        }
+      });
+
+      qrCode.append(qrDiv);
+    }
+
+    // Animasi pesan selamat
+    const animMsg = document.createElement('div');
+    animMsg.className = 'animation-message';
+    animMsg.setAttribute('role', 'alert');
+    animMsg.textContent = "🎉 Selamat, web kamu sudah jadi! 🎉";
+    outputArea.appendChild(animMsg);
+
+    animMsg.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+</script>
+
+</body>
+</html>
